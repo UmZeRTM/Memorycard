@@ -43,15 +43,41 @@ def select_random_question():
 
     return question
 
+
 def check_answer():
-    if btn_answer3.isChecked():
+    selected_answer = None
+
+    if btn_answer1.isChecked():
+        selected_answer = 1
+    elif btn_answer2.isChecked():
+        selected_answer = 2
+    elif btn_answer3.isChecked():
+        selected_answer = 3
+    elif btn_answer4.isChecked():
+        selected_answer = 4
+
+    if selected_answer == correct_answer_index:
         QMessageBox.information(main_win, 'результат', 'Відповідь вірна')
     else:
         QMessageBox.information(main_win, 'результат', 'Обери іншу відповідь')
 
 
+correct_answer_index = None
+
+
 def change_questions():
-    pass
+    global correct_answer_index
+
+    question_data = select_random_question()
+
+    if question_data:
+        question.setText(question_data[1])
+        btn_answer1.setText(question_data[2])
+        btn_answer2.setText(question_data[3])
+        btn_answer3.setText(question_data[4])
+        btn_answer4.setText(question_data[5])
+
+        correct_answer_index = question_data[6]
 
 
 def add_question():
@@ -107,12 +133,10 @@ def add_question():
     dialog.exec()
 
 
-
-
-
 app = QApplication([])
 main_win = QWidget()
 main_win.setWindowTitle('Memory card')
+
 
 question = QLabel('В якому році канал отримав «золоту кнопку» від YouTube?')
 btn_answer1 = QRadioButton('2005')
@@ -126,7 +150,6 @@ change_question = QPushButton('Змінити питання')
 change_question.clicked.connect(change_questions)
 add_new_question = QPushButton('Додати нове запитання')
 add_new_question.clicked.connect(add_question)
-
 
 layout_main = QVBoxLayout()
 layout_main.addWidget(question, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -161,4 +184,3 @@ layout_main.addLayout(layoutH5)
 main_win.setLayout(layout_main)
 main_win.show()
 app.exec()
-
